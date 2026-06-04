@@ -1,10 +1,11 @@
-module github.com/miekg/dns
+module github.com/miekg/dns // keep original name to make sure it can be used as a drop-in replacement
 
 go 1.25.0
 
 require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/mattn/go-pointer v0.0.1
+	github.com/mr-torgue/dns v1.1.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/net v0.52.0
@@ -21,4 +22,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
 
-replace github.com/miekg/dns => .
+//replace github.com/miekg/dns => .

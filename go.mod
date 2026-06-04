@@ -1,6 +1,6 @@
 module github.com/miekg/dns // keep original name to make sure it can be used as a drop-in replacement
 
-go 1.26.3
+go 1.25
 
 require (
 	github.com/mr-torgue/go-openssl v1.0.0

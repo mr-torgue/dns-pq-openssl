@@ -1,4 +1,4 @@
-module github.com/mr-torgue/dns
+module github.com/miekg/dns
 
 go 1.25.0
 
@@ -21,4 +21,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
 
-//replace github.com/pexip/go-openssl => ./pkg/go-openssl

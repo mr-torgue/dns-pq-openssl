@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mr-torgue/dns/pkg/go-openssl"
+	"github.com/mr-torgue/go-openssl"
 )
 
 // DNSSEC encryption algorithm codes.

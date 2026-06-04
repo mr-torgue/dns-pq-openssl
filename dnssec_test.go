@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mr-torgue/dns/pkg/go-openssl"
+	"github.com/mr-torgue/go-openssl"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

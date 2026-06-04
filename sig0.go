@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/mr-torgue/dns/pkg/go-openssl"
+	"github.com/mr-torgue/go-openssl"
 )
 
 // Sign signs a dns.Msg. It fills the signature with the appropriate data.

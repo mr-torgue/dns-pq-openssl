@@ -1,9 +1,9 @@
-module github.com/miekg/dns // keep original name to make sure it can be used as a drop-in replacement
+module github.com/mr-torgue/dns
 
-go 1.25
+go 1.25.0
 
 require (
-	github.com/mr-torgue/go-openssl v1.0.0
+	github.com/mr-torgue/go-openssl v1.0.1
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/net v0.52.0
 	golang.org/x/sync v0.20.0
@@ -21,9 +21,3 @@ require (
 	golang.org/x/mod v0.34.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-// there are a few internal references:
-//   1. utils package (probably works without rewrite)
-//   2. some of the tests 
-// check if this can be removed in the future (prevent circular imports)
-replace github.com/miekg/dns => .

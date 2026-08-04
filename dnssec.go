@@ -81,9 +81,9 @@ var AlgorithmToString = map[uint8]string{
 	MLDSA44:                "mldsa44",
 	P256_MLDSA44:           "p256_mldsa44",
 	RSA3072_MLDSA44:        "rsa3072_mldsa44",
-	SLHDSASHA2128S:         "slhdsasha2128s",
-	P256_SLHDSASHA2128S:    "p256_slhdsasha2128s",
-	RSA3072_SLHDSASHA2128S: "rsa3072_slhdsasha2128s",
+	SLHDSASHA2128S:         "SLH-DSA-SHA2-128s",
+	P256_SLHDSASHA2128S:    "p256_sphincssha2128ssimple",
+	RSA3072_SLHDSASHA2128S: "rsa3072_sphincssha2128ssimple",
 	MAYO1:                  "mayo1",
 	P256_MAYO1:             "p256_mayo1",
 	SNOVA2454:              "snova2454",
@@ -532,7 +532,7 @@ func (rr *RRSIG) Verify(k *DNSKEY, rrset []RR) error {
 		//}
 		//return ErrSig
 
-	case ED25519, FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024:
+	case ED25519, FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024, MLDSA44, P256_MLDSA44, RSA3072_MLDSA44, SLHDSASHA2128S, P256_SLHDSASHA2128S, RSA3072_SLHDSASHA2128S, MAYO1, P256_MAYO1, SNOVA2454, P256_SNOVA2454:
 		pubkey := k.publicKeyGeneric()
 		if pubkey == nil {
 			return ErrKey
@@ -678,7 +678,7 @@ func (k *DNSKEY) publicKeyGeneric() openssl.PublicKey {
 			return nil
 		}
 		pubkey, err = openssl.BuildRawPublicKey(keybuf, AlgorithmToString[k.Algorithm])
-	case FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024:
+	case FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024, MLDSA44, P256_MLDSA44, RSA3072_MLDSA44, SLHDSASHA2128S, P256_SLHDSASHA2128S, RSA3072_SLHDSASHA2128S, MAYO1, P256_MAYO1, SNOVA2454, P256_SNOVA2454:
 		pubkey, err = openssl.BuildRawPublicKey(keybuf, AlgorithmToString[k.Algorithm])
 	default:
 		return nil

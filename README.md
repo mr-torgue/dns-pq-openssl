@@ -21,23 +21,24 @@ To do:
 - [ ] Merge with, or move to, DNS version 2
 
 # Supported Algorithms
-|            Algorithm         | DNSSEC Algorithm ID | Activated |
-| ---------------------------- | ------------------- | --------- |
-| FALCON512                    |         17          | Yes        |
-| P256_FALCON512 (Hybrid)      |         18          | Yes        |
-| RSA3072_FALCON512 (Hybrid)   |         19          | Yes        |
-| FALCON1024                   |         20          | Yes        |
-| P521_FALCON1024 (Hybrid)     |         21          | Yes        |
-| DILITHIUM2                   |         22          | No        |
-| P256_DILITHIUM2 (Hybrid)     |         23          | No        |
-| RSA3072_DILITHIUM2 (Hybrid)  |         24          | No        |
-| SPHINCS+-SHA-256-128s Simple |         25          | No        |
-| P256_SPHINCS+-SHA-256-128s Simple (Hybrid)    |         26          | No        |
-| RSA3072_SPHINCS+-SHA-256-128s Simple (Hybrid) |         27          | No        |
-| MAYO1                        |         28          | No        |
-| P256_MAYO1                   |         29          | No        |
-| SNOVA2454                    |         30          | No        |
-| P256_SNOVA2454               |         31          | No        |
+
+|            Algorithm         | DNSSEC Algorithm ID | Hybrid | Implemented |
+| ---------------------------- | ------------------- | ------ | ----------- |
+| falconpadded512              |         17          | No     | Yes         |
+| p256_falconpadded512         |         18          | Yes    | Yes         |
+| rsa3072_falconpadded512      |         19          | Yes    | Yes         |
+| falconpadded1024             |         20          | No     | Yes         |
+| p521_falconpadded1024        |         21          | Yes    | Yes         |
+| mldsa44                      |         22          | No     | Yes         |
+| p256_mldsa44                 |         23          | Yes    | Yes         |
+| rsa3072_mldsa44              |         24          | Yes    | Yes         |
+| slhdsasha2128s               |         25          | No     | Yes         |
+| p256_slhdsasha2128s          |         26          | Yes    | Yes         |
+| rsa3072_slhdsasha2128s       |         27          | Yes    | Yes         |
+| mayo1                        |         28          | No     | Yes         |
+| p256_mayo1                   |         29          | Yes    | Yes         |
+| snova2454                    |         30          | No     | Yes         |
+| p256_snova2454               |         31          | Yes    | Yes         |
 
 # Benchmarks
 

@@ -33,29 +33,21 @@ func (k *DNSKEY) Generate(bits int) (openssl.PrivateKey, error) {
 			return nil, ErrKeySize
 		}
 	case ED25519:
-		if bits != 256 {
-			return nil, ErrKeySize
-		}
 	case FALCON512:
-		if bits != 1281 {
-			return nil, ErrKeySize
-		}
 	case P256_FALCON512:
-		if bits != 1406 {
-			return nil, ErrKeySize
-		}
 	case RSA3072_FALCON512:
-		if bits != 3055 {
-			return nil, ErrKeySize
-		}
 	case FALCON1024:
-		if bits != 2305 {
-			return nil, ErrKeySize
-		}
 	case P521_FALCON1024:
-		if bits != 2532 {
-			return nil, ErrKeySize
-		}
+	case MLDSA44:
+	case P256_MLDSA44:
+	case RSA3072_MLDSA44:
+	case SLHDSASHA2128S:
+	case P256_SLHDSASHA2128S:
+	case RSA3072_SLHDSASHA2128S:
+	case MAYO1:
+	case P256_MAYO1:
+	case SNOVA2454:
+	case P256_SNOVA2454:
 	default:
 		return nil, ErrAlg
 	}
@@ -101,7 +93,7 @@ func (k *DNSKEY) Generate(bits int) (openssl.PrivateKey, error) {
 		}
 		k.setPublicKeyGeneric(priv)
 		return priv, nil
-	case FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024:
+	case FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024, MLDSA44, P256_MLDSA44, RSA3072_MLDSA44, SLHDSASHA2128S, P256_SLHDSASHA2128S, RSA3072_SLHDSASHA2128S, MAYO1, P256_MAYO1, SNOVA2454, P256_SNOVA2454:
 		priv, err := openssl.GenerateKey(AlgorithmToString[k.Algorithm])
 		if err != nil {
 			return nil, err

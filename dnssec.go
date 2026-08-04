@@ -39,6 +39,16 @@ const (
 	RSA3072_FALCON512
 	FALCON1024
 	P521_FALCON1024
+	MLDSA44
+	P256_MLDSA44
+	RSA3072_MLDSA44
+	SLHDSASHA2128S
+	P256_SLHDSASHA2128S
+	RSA3072_SLHDSASHA2128S
+	MAYO1
+	P256_MAYO1
+	SNOVA2454
+	P256_SNOVA2454
 
 	INDIRECT   uint8 = 252
 	PRIVATEDNS uint8 = 253 // Private (experimental keys)
@@ -47,27 +57,37 @@ const (
 
 // AlgorithmToString is a map of algorithm IDs to algorithm names.
 var AlgorithmToString = map[uint8]string{
-	RSAMD5:            "RSAMD5",
-	DH:                "DH",
-	DSA:               "DSA",
-	RSASHA1:           "RSASHA1",
-	DSANSEC3SHA1:      "DSA-NSEC3-SHA1",
-	RSASHA1NSEC3SHA1:  "RSASHA1-NSEC3-SHA1",
-	RSASHA256:         "RSASHA256",
-	RSASHA512:         "RSASHA512",
-	ECCGOST:           "ECC-GOST",
-	ECDSAP256SHA256:   "ECDSAP256SHA256",
-	ECDSAP384SHA384:   "ECDSAP384SHA384",
-	ED25519:           "ED25519",
-	ED448:             "ED448",
-	INDIRECT:          "INDIRECT",
-	PRIVATEDNS:        "PRIVATEDNS",
-	PRIVATEOID:        "PRIVATEOID",
-	FALCON512:         "falconpadded512",
-	P256_FALCON512:    "p256_falconpadded512",
-	RSA3072_FALCON512: "rsa3072_falconpadded512",
-	FALCON1024:        "falconpadded1024",
-	P521_FALCON1024:   "p521_falconpadded1024",
+	RSAMD5:                 "RSAMD5",
+	DH:                     "DH",
+	DSA:                    "DSA",
+	RSASHA1:                "RSASHA1",
+	DSANSEC3SHA1:           "DSA-NSEC3-SHA1",
+	RSASHA1NSEC3SHA1:       "RSASHA1-NSEC3-SHA1",
+	RSASHA256:              "RSASHA256",
+	RSASHA512:              "RSASHA512",
+	ECCGOST:                "ECC-GOST",
+	ECDSAP256SHA256:        "ECDSAP256SHA256",
+	ECDSAP384SHA384:        "ECDSAP384SHA384",
+	ED25519:                "ED25519",
+	ED448:                  "ED448",
+	INDIRECT:               "INDIRECT",
+	PRIVATEDNS:             "PRIVATEDNS",
+	PRIVATEOID:             "PRIVATEOID",
+	FALCON512:              "falconpadded512",
+	P256_FALCON512:         "p256_falconpadded512",
+	RSA3072_FALCON512:      "rsa3072_falconpadded512",
+	FALCON1024:             "falconpadded1024",
+	P521_FALCON1024:        "p521_falconpadded1024",
+	MLDSA44:                "mldsa44",
+	P256_MLDSA44:           "p256_mldsa44",
+	RSA3072_MLDSA44:        "rsa3072_mldsa44",
+	SLHDSASHA2128S:         "slhdsasha2128s",
+	P256_SLHDSASHA2128S:    "p256_slhdsasha2128s",
+	RSA3072_SLHDSASHA2128S: "rsa3072_slhdsasha2128s",
+	MAYO1:                  "mayo1",
+	P256_MAYO1:             "p256_mayo1",
+	SNOVA2454:              "snova2454",
+	P256_SNOVA2454:         "p256_snova2454",
 }
 
 // AlgorithmToHash is a map of algorithm crypto hash IDs to crypto.Hash's.
@@ -75,20 +95,30 @@ var AlgorithmToString = map[uint8]string{
 // is 0, implying no (external) hashing should occur. The non-exported identityHash is then
 // used.
 var AlgorithmToHash = map[uint8]string{
-	RSAMD5:            "md5", // Deprecated in RFC 6725
-	DSA:               "sha1",
-	RSASHA1:           "sha1",
-	RSASHA1NSEC3SHA1:  "sha1",
-	RSASHA256:         "sha256",
-	ECDSAP256SHA256:   "sha256",
-	ECDSAP384SHA384:   "sha384",
-	RSASHA512:         "sha512",
-	FALCON512:         "",
-	P256_FALCON512:    "",
-	RSA3072_FALCON512: "",
-	FALCON1024:        "",
-	P521_FALCON1024:   "",
-	ED25519:           "",
+	RSAMD5:                 "md5", // Deprecated in RFC 6725
+	DSA:                    "sha1",
+	RSASHA1:                "sha1",
+	RSASHA1NSEC3SHA1:       "sha1",
+	RSASHA256:              "sha256",
+	ECDSAP256SHA256:        "sha256",
+	ECDSAP384SHA384:        "sha384",
+	RSASHA512:              "sha512",
+	FALCON512:              "",
+	P256_FALCON512:         "",
+	RSA3072_FALCON512:      "",
+	FALCON1024:             "",
+	P521_FALCON1024:        "",
+	ED25519:                "",
+	MLDSA44:                "",
+	P256_MLDSA44:           "",
+	RSA3072_MLDSA44:        "",
+	SLHDSASHA2128S:         "",
+	P256_SLHDSASHA2128S:    "",
+	RSA3072_SLHDSASHA2128S: "",
+	MAYO1:                  "",
+	P256_MAYO1:             "",
+	SNOVA2454:              "",
+	P256_SNOVA2454:         "",
 }
 
 // AlgorithmToCurve maps an algorithm to the correct curve.
@@ -353,7 +383,7 @@ func sign(k openssl.PrivateKey, h *openssl.Digest, data []byte, alg uint8) ([]by
 	}
 
 	switch alg {
-	case RSASHA1, RSASHA1NSEC3SHA1, RSASHA256, RSASHA512, ED25519, FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024:
+	case RSASHA1, RSASHA1NSEC3SHA1, RSASHA256, RSASHA512, ED25519, FALCON512, P256_FALCON512, RSA3072_FALCON512, FALCON1024, P521_FALCON1024, MLDSA44, P256_MLDSA44, RSA3072_MLDSA44, SLHDSASHA2128S, P256_SLHDSASHA2128S, RSA3072_SLHDSASHA2128S, MAYO1, P256_MAYO1, SNOVA2454, P256_SNOVA2454:
 		return signature, nil
 	case ECDSAP256SHA256, ECDSAP384SHA384:
 		ecdsaSignature := &struct {

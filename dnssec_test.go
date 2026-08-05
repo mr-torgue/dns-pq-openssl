@@ -2485,3 +2485,174 @@ func BenchmarkSignVerifyP521FALCON1024(b *testing.B) {
 		require.Nil(b, err, "verify err should be nil")
 	}
 }
+
+// TestVerifyUnsupportedAlgorithm tests that verification fails with ErrAlg for unsupported algorithms
+func TestVerifyUnsupportedAlgorithm(t *testing.T) {
+	soa := getSoa()
+
+	// Test with MAYO1 (algorithm 28) - unsupported
+	sig := new(RRSIG)
+	sig.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig.TypeCovered = TypeSOA
+	sig.Algorithm = MAYO1
+	sig.Labels = 2
+	sig.Expiration = 1296534305
+	sig.Inception = 1293942305
+	sig.OrigTtl = 14400
+	sig.KeyTag = 12345
+	sig.SignerName = "miek.nl."
+	sig.Signature = "dGVzdA==" // dummy signature
+
+	key := new(DNSKEY)
+	key.Hdr.Name = "miek.nl."
+	key.Hdr.Class = ClassINET
+	key.Hdr.Ttl = 14400
+	key.Flags = 256
+	key.Protocol = 3
+	key.Algorithm = MAYO1
+	key.PublicKey = "dGVzdA==" // dummy key
+
+	err := sig.Verify(key, []RR{soa})
+	require.NotNil(t, err, "verify should fail for unsupported algorithm MAYO1")
+	assert.Equal(t, ErrAlg, err, "error should be ErrAlg for unsupported algorithm")
+
+	// Test with DILITHIUM2 (algorithm 22) - unsupported
+	sig2 := new(RRSIG)
+	sig2.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig2.TypeCovered = TypeSOA
+	sig2.Algorithm = DILITHIUM2
+	sig2.Labels = 2
+	sig2.Expiration = 1296534305
+	sig2.Inception = 1293942305
+	sig2.OrigTtl = 14400
+	sig2.KeyTag = 12345
+	sig2.SignerName = "miek.nl."
+	sig2.Signature = "dGVzdA==" // dummy signature
+
+	key2 := new(DNSKEY)
+	key2.Hdr.Name = "miek.nl."
+	key2.Hdr.Class = ClassINET
+	key2.Hdr.Ttl = 14400
+	key2.Flags = 256
+	key2.Protocol = 3
+	key2.Algorithm = DILITHIUM2
+	key2.PublicKey = "dGVzdA==" // dummy key
+
+	err = sig2.Verify(key2, []RR{soa})
+	require.NotNil(t, err, "verify should fail for unsupported algorithm DILITHIUM2")
+	assert.Equal(t, ErrAlg, err, "error should be ErrAlg for unsupported algorithm")
+
+	// Test with algorithm 40 (reserved/unassigned) - should fail
+	sig3 := new(RRSIG)
+	sig3.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig3.TypeCovered = TypeSOA
+	sig3.Algorithm = 40
+	sig3.Labels = 2
+	sig3.Expiration = 1296534305
+	sig3.Inception = 1293942305
+	sig3.OrigTtl = 14400
+	sig3.KeyTag = 12345
+	sig3.SignerName = "miek.nl."
+	sig3.Signature = "dGVzdA==" // dummy signature
+
+	key3 := new(DNSKEY)
+	key3.Hdr.Name = "miek.nl."
+	key3.Hdr.Class = ClassINET
+	key3.Hdr.Ttl = 14400
+	key3.Flags = 256
+	key3.Protocol = 3
+	key3.Algorithm = 40
+	key3.PublicKey = "dGVzdA==" // dummy key
+
+	err = sig3.Verify(key3, []RR{soa})
+	require.NotNil(t, err, "verify should fail for unassigned algorithm 40")
+	assert.Equal(t, ErrAlg, err, "error should be ErrAlg for unassigned algorithm")
+
+	// Test with MLDSA44 (P256_DILITHIUM2, algorithm 23) - unsupported
+	sig4 := new(RRSIG)
+	sig4.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig4.TypeCovered = TypeSOA
+	sig4.Algorithm = P256_DILITHIUM2
+	sig4.Labels = 2
+	sig4.Expiration = 1296534305
+	sig4.Inception = 1293942305
+	sig4.OrigTtl = 14400
+	sig4.KeyTag = 12345
+	sig4.SignerName = "miek.nl."
+	sig4.Signature = "dGVzdA==" // dummy signature
+
+	key4 := new(DNSKEY)
+	key4.Hdr.Name = "miek.nl."
+	key4.Hdr.Class = ClassINET
+	key4.Hdr.Ttl = 14400
+	key4.Flags = 256
+	key4.Protocol = 3
+	key4.Algorithm = P256_DILITHIUM2
+	key4.PublicKey = "dGVzdA==" // dummy key
+
+	err = sig4.Verify(key4, []RR{soa})
+	require.NotNil(t, err, "verify should fail for unsupported algorithm P256_DILITHIUM2")
+	assert.Equal(t, ErrAlg, err, "error should be ErrAlg for unsupported algorithm")
+
+	// Test with SPHINCS+ (algorithm 25) - unsupported
+	sig5 := new(RRSIG)
+	sig5.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig5.TypeCovered = TypeSOA
+	sig5.Algorithm = SPHINCS256_128S
+	sig5.Labels = 2
+	sig5.Expiration = 1296534305
+	sig5.Inception = 1293942305
+	sig5.OrigTtl = 14400
+	sig5.KeyTag = 12345
+	sig5.SignerName = "miek.nl."
+	sig5.Signature = "dGVzdA==" // dummy signature
+
+	key5 := new(DNSKEY)
+	key5.Hdr.Name = "miek.nl."
+	key5.Hdr.Class = ClassINET
+	key5.Hdr.Ttl = 14400
+	key5.Flags = 256
+	key5.Protocol = 3
+	key5.Algorithm = SPHINCS256_128S
+	key5.PublicKey = "dGVzdA==" // dummy key
+
+	err = sig5.Verify(key5, []RR{soa})
+	require.NotNil(t, err, "verify should fail for unsupported algorithm SPHINCS256_128S")
+	assert.Equal(t, ErrAlg, err, "error should be ErrAlg for unsupported algorithm")
+}
+
+// TestVerifySupportedAlgorithm tests that verification works with supported algorithms
+func TestVerifySupportedAlgorithm(t *testing.T) {
+	soa := getSoa()
+
+	// Test with FALCON512 (algorithm 17) - supported in this fork
+	// We can't actually test the verification without a real key and signature,
+	// but we can at least test that it doesn't return ErrAlg immediately
+	// (it will return ErrKey because we don't have a valid key, but not ErrAlg)
+	sig := new(RRSIG)
+	sig.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig.TypeCovered = TypeSOA
+	sig.Algorithm = FALCON512
+	sig.Labels = 2
+	sig.Expiration = 1296534305
+	sig.Inception = 1293942305
+	sig.OrigTtl = 14400
+	sig.KeyTag = 12345
+	sig.SignerName = "miek.nl."
+	sig.Signature = "dGVzdA==" // dummy signature
+
+	key := new(DNSKEY)
+	key.Hdr.Name = "miek.nl."
+	key.Hdr.Class = ClassINET
+	key.Hdr.Ttl = 14400
+	key.Flags = 256
+	key.Protocol = 3
+	key.Algorithm = FALCON512
+	key.PublicKey = "dGVzdA==" // dummy key
+
+	err := sig.Verify(key, []RR{soa})
+	// Should not return ErrAlg (algorithm is supported)
+	// Will return ErrKey because the key is invalid, but that's expected
+	require.NotNil(t, err, "verify should fail with invalid key")
+	assert.NotEqual(t, ErrAlg, err, "error should not be ErrAlg for supported algorithm FALCON512")
+}

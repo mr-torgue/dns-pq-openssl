@@ -40,6 +40,18 @@ const (
 	FALCON1024
 	P521_FALCON1024
 
+	// PQC algorithms (not yet activated in this fork)
+	DILITHIUM2       uint8 = 22
+	P256_DILITHIUM2 uint8 = 23
+	RSA3072_DILITHIUM2 uint8 = 24
+	SPHINCS256_128S uint8 = 25
+	P256_SPHINCS256_128S uint8 = 26
+	RSA3072_SPHINCS256_128S uint8 = 27
+	MAYO1           uint8 = 28
+	P256_MAYO1     uint8 = 29
+	SNOVA2454      uint8 = 30
+	P256_SNOVA2454 uint8 = 31
+
 	INDIRECT   uint8 = 252
 	PRIVATEDNS uint8 = 253 // Private (experimental keys)
 	PRIVATEOID uint8 = 254
@@ -68,6 +80,16 @@ var AlgorithmToString = map[uint8]string{
 	RSA3072_FALCON512: "rsa3072_falconpadded512",
 	FALCON1024:        "falconpadded1024",
 	P521_FALCON1024:   "p521_falconpadded1024",
+	DILITHIUM2:        "mldsa44",
+	P256_DILITHIUM2:  "p256_mldsa44",
+	RSA3072_DILITHIUM2: "rsa3072_mldsa44",
+	SPHINCS256_128S:  "sphincssha256128ssimple",
+	P256_SPHINCS256_128S: "p256_sphincssha256128ssimple",
+	RSA3072_SPHINCS256_128S: "rsa3072_sphincssha256128ssimple",
+	MAYO1:            "mayo1",
+	P256_MAYO1:      "p256_mayo1",
+	SNOVA2454:       "snova2454",
+	P256_SNOVA2454:  "p256_snova2454",
 }
 
 // AlgorithmToHash is a map of algorithm crypto hash IDs to crypto.Hash's.
@@ -89,6 +111,16 @@ var AlgorithmToHash = map[uint8]string{
 	FALCON1024:        "",
 	P521_FALCON1024:   "",
 	ED25519:           "",
+	DILITHIUM2:        "",
+	P256_DILITHIUM2:  "",
+	RSA3072_DILITHIUM2: "",
+	SPHINCS256_128S:  "",
+	P256_SPHINCS256_128S: "",
+	RSA3072_SPHINCS256_128S: "",
+	MAYO1:            "",
+	P256_MAYO1:      "",
+	SNOVA2454:       "",
+	P256_SNOVA2454:  "",
 }
 
 // AlgorithmToCurve maps an algorithm to the correct curve.

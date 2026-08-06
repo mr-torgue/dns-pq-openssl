@@ -367,6 +367,81 @@ func TestSignVerify(t *testing.T) {
 	}
 }
 
+// TestShouldNotSignVerifyWithInvalidAlgorithm tests if generating, verificatation and signing fails if it uses an incorrect algorithm.
+func TestShouldNotSignVerifyWithInvalidAlgorithm(t *testing.T) {
+	// Key generation should fail
+	key := new(DNSKEY)
+	key.Hdr.Rrtype = TypeDNSKEY
+	key.Hdr.Name = "miek.nl."
+	key.Hdr.Class = ClassINET
+	key.Hdr.Ttl = 14400
+	key.Flags = 256
+	key.Protocol = 3
+	key.Algorithm = 32 // note: if new schemes get added this fails!
+	_, err := key.Generate(0)
+	assert.NotNil(t, err, "should fail because of wrong algorithm number (generate)")
+
+	// create proper key, but sign with wrong one
+	key = new(DNSKEY)
+	key.Hdr.Rrtype = TypeDNSKEY
+	key.Hdr.Name = "miek.nl."
+	key.Hdr.Class = ClassINET
+	key.Hdr.Ttl = 14400
+	key.Flags = 256
+	key.Protocol = 3
+	key.Algorithm = 31 // P256_MAYO1
+	privkey, err := key.Generate(0)
+
+	soa := new(SOA)
+	soa.Hdr = RR_Header{"miek.nl.", TypeSOA, ClassINET, 14400, 0}
+	soa.Ns = "open.nlnetlabs.nl."
+	soa.Mbox = "miekg.atoom.net."
+	soa.Serial = 1293945905
+	soa.Refresh = 14400
+	soa.Retry = 3600
+	soa.Expire = 604800
+	soa.Minttl = 86400
+
+	// Fill in the values of the Sig, before signing
+	sig := new(RRSIG)
+	sig.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig.TypeCovered = soa.Hdr.Rrtype
+	sig.Labels = uint8(CountLabel(soa.Hdr.Name)) // works for all 3
+	sig.OrigTtl = soa.Hdr.Ttl
+	sig.Expiration = 1296534305 // date -u '+%s' -d"2011-02-01 04:25:05"
+	sig.Inception = 1293942305  // date -u '+%s' -d"2011-01-02 04:25:05"
+	sig.KeyTag = key.KeyTag()   // Get the keyfrom the Key
+	sig.SignerName = key.Hdr.Name
+	sig.Algorithm = 32 // note: if new schemes get added this fails!
+
+	err = sig.Sign(privkey, []RR{soa})
+	assert.NotNil(t, err, "should fail because of wrong algorithm number (sign)")
+
+	// create working signature
+	sig = new(RRSIG)
+	sig.Hdr = RR_Header{"miek.nl.", TypeRRSIG, ClassINET, 14400, 0}
+	sig.TypeCovered = soa.Hdr.Rrtype
+	sig.Labels = uint8(CountLabel(soa.Hdr.Name)) // works for all 3
+	sig.OrigTtl = soa.Hdr.Ttl
+	sig.Expiration = 1296534305 // date -u '+%s' -d"2011-02-01 04:25:05"
+	sig.Inception = 1293942305  // date -u '+%s' -d"2011-01-02 04:25:05"
+	sig.KeyTag = key.KeyTag()   // Get the keyfrom the Key
+	sig.SignerName = key.Hdr.Name
+	sig.Algorithm = 31
+	err = sig.Sign(privkey, []RR{soa})
+	assert.Nil(t, err)
+
+	// verify should work as well
+	err = sig.Verify(key, []RR{soa})
+	assert.Nil(t, err)
+
+	// this should not work
+	sig.Algorithm = 32
+	err = sig.Verify(key, []RR{soa})
+	assert.NotNil(t, err, "should fail because of wrong algorithm number (verify)")
+
+}
+
 // Test if RRSIG.Verify() conforms to RFC 4035 Section 5.3.1
 func TestShouldNotVerifyInvalidSig(t *testing.T) {
 	// The RRSIG RR and the RRset MUST have the same owner name
